@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OkulModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Kurslar">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Adı" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Açıklama" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Ogretmenlers" Relationship="Self.FK_Ogretmenler_Kurslar" FromRole="Kurslar" ToRole="Ogretmenler" />
+    <NavigationProperty Name="Sınıflar" Relationship="Self.FK_Sınıflar_Kurslar" FromRole="Kurslar" ToRole="Sınıflar" />
+  </EntityType>
+  <EntityType Name="Ogrenciler">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Ad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Soyad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Telefon" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Adres" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SınıfId" Type="Int32" Nullable="false" />
+    <Property Name="TC" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="TaksitSayısı" Type="Byte" Nullable="false" />
+    <Property Name="TaksitTutar" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="Sınıflar" Relationship="Self.FK_Ogrenciler_Sınıflar" FromRole="Ogrenciler" ToRole="Sınıflar" />
+  </EntityType>
+  <EntityType Name="Ogretmenler">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Adı" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Soyadı" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Telefon" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="KursId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Kurslar" Relationship="Self.FK_Ogretmenler_Kurslar" FromRole="Ogretmenler" ToRole="Kurslar" />
+    <NavigationProperty Name="Sınıflar" Relationship="Self.FK_Sınıflar_Ogretmenler" FromRole="Ogretmenler" ToRole="Sınıflar" />
+  </EntityType>
+  <EntityType Name="Sınıflar">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Adı" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="OgretmenId" Type="Int32" Nullable="false" />
+    <Property Name="KursId" Type="Int32" Nullable="false" />
+    <Property Name="ATarihi" Type="DateTime" Precision="3" />
+    <Property Name="KTarihi" Type="DateTime" Precision="3" />
+    <Property Name="Açıklama" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Kurslar" Relationship="Self.FK_Sınıflar_Kurslar" FromRole="Sınıflar" ToRole="Kurslar" />
+    <NavigationProperty Name="Ogrencilers" Relationship="Self.FK_Ogrenciler_Sınıflar" FromRole="Sınıflar" ToRole="Ogrenciler" />
+    <NavigationProperty Name="Ogretmenler" Relationship="Self.FK_Sınıflar_Ogretmenler" FromRole="Sınıflar" ToRole="Ogretmenler" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Ogretmenler_Kurslar">
+    <End Role="Kurslar" Type="Self.Kurslar" Multiplicity="1" />
+    <End Role="Ogretmenler" Type="Self.Ogretmenler" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kurslar">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ogretmenler">
+        <PropertyRef Name="KursId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Sınıflar_Kurslar">
+    <End Role="Kurslar" Type="Self.Kurslar" Multiplicity="1" />
+    <End Role="Sınıflar" Type="Self.Sınıflar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kurslar">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Sınıflar">
+        <PropertyRef Name="KursId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ogrenciler_Sınıflar">
+    <End Role="Sınıflar" Type="Self.Sınıflar" Multiplicity="1" />
+    <End Role="Ogrenciler" Type="Self.Ogrenciler" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sınıflar">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ogrenciler">
+        <PropertyRef Name="SınıfId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Sınıflar_Ogretmenler">
+    <End Role="Ogretmenler" Type="Self.Ogretmenler" Multiplicity="1" />
+    <End Role="Sınıflar" Type="Self.Sınıflar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ogretmenler">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Sınıflar">
+        <PropertyRef Name="OgretmenId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="OkulEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Kurslars" EntityType="Self.Kurslar" />
+    <EntitySet Name="Ogrencilers" EntityType="Self.Ogrenciler" />
+    <EntitySet Name="Ogretmenlers" EntityType="Self.Ogretmenler" />
+    <EntitySet Name="Sınıflar" EntityType="Self.Sınıflar" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK_Ogretmenler_Kurslar" Association="Self.FK_Ogretmenler_Kurslar">
+      <End Role="Kurslar" EntitySet="Kurslars" />
+      <End Role="Ogretmenler" EntitySet="Ogretmenlers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Sınıflar_Kurslar" Association="Self.FK_Sınıflar_Kurslar">
+      <End Role="Kurslar" EntitySet="Kurslars" />
+      <End Role="Sınıflar" EntitySet="Sınıflar" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ogrenciler_Sınıflar" Association="Self.FK_Ogrenciler_Sınıflar">
+      <End Role="Sınıflar" EntitySet="Sınıflar" />
+      <End Role="Ogrenciler" EntitySet="Ogrencilers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Sınıflar_Ogretmenler" Association="Self.FK_Sınıflar_Ogretmenler">
+      <End Role="Ogretmenler" EntitySet="Ogretmenlers" />
+      <End Role="Sınıflar" EntitySet="Sınıflar" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
